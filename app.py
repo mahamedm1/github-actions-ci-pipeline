@@ -14,7 +14,7 @@ r = redis.Redis(
 # Welcome page
 @app.route('/')
 def welcome_page():
-    return 'Welcome to my homepage'
+    return 'Welcome to my homepage - Updated using CI/CD!'
 
 # Visit counter
 @app.route('/count')
