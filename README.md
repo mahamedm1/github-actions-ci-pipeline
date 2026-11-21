@@ -9,8 +9,6 @@ This project demonstrates an automated CI/CD pipeline using GitHub Actions for a
 
 ## Architecture
 
-```text
-
 ## Architecture
 
 ```text
