@@ -1,13 +1,14 @@
+
 # GitHub Actions CI/CD Pipeline
 
 ## Overview
 
-This project demonstrates an automated CI/CD pipeline using GitHub Actions for a containerised Flask application with Redis. The pipeline validates Python code, builds Docker images and automatically publishes them to Docker Hub after successful CI execution. The project is divided into two workflows:
+This project demonstrates an automated CI/CD pipeline using GitHub Actions for a containerised Flask application with Redis. The pipeline validates Python code, builds Docker images and automatically publishes them to Docker Hub after successful CI execution.
+
+The project is divided into two workflows:
 
 - **Continuous Integration (CI):** Automated code-quality checks and Docker image build verification.
 - **Continuous Delivery (CD):** Automated Docker image publishing to Docker Hub following successful CI execution.
-
-## Architecture
 
 ## Architecture
 
@@ -30,7 +31,6 @@ GitHub Actions CD
 Docker Hub
 ```
 
-```
 ## Task 1 – Continuous Integration
 
 The CI workflow is defined in `.github/workflows/ci.yml`. It runs automatically when code is pushed to `main` or a pull request targets `main`.
@@ -55,9 +55,9 @@ The workflow successfully completed all configured checks.
 
 The initial CI workflow failed because Ruff detected incorrectly ordered imports in `app.py` (`I001`).
 
-![Failed Ruff Lint Check](screenshots/failed-lint-check.png)
+![Failed Ruff Lint Check](screenshots/failed-linting-check.png)
 
-The issue was resolved locally by changing the order of the import. The corrected code was committed and pushed, automatically triggering another successful CI run.
+The issue was resolved locally by correcting the import order. The corrected code was committed and pushed, automatically triggering another successful CI run.
 
 ## Task 2 – Continuous Delivery
 
@@ -79,6 +79,14 @@ Docker Hub credentials are stored securely as GitHub Actions repository secrets:
 
 The workflow references these secrets without exposing credentials in the repository.
 
+### Successful CD Execution
+
+The CD workflow successfully authenticated with Docker Hub, built the application image and pushed it to the container registry.
+
+![Successful CD Workflow](screenshots/cd-success-workflow.png)
+
+![Successful CD Job Steps](screenshots/cd-successful-job-steps.png)
+
 ### Docker Image Publishing
 
 The CD workflow builds and publishes the image using:
@@ -90,13 +98,13 @@ docker push mahamedm17/flask-redis-app:latest
 
 **Docker Hub Repository:** [mahamedm17/flask-redis-app](https://hub.docker.com/r/mahamedm17/flask-redis-app)
 
-![Docker Image Published](screenshots/cd/dockerhub-image-published.png)
+![Docker Image Published](screenshots/dockerhub-image-published.png)
 
 ### CD Troubleshooting
 
-The initial CD workflow failed during Docker Hub authentication with the error: `Username and password required`
+The initial CD workflow failed during Docker Hub authentication with the error: `Username and password required`.
 
-![Docker Hub Authentication Failure](screenshots/cd/dockerhub-authentication-failed.png)
+![Docker Hub Authentication Failure](screenshots/dockerhub-authentication-failed.png)
 
 The issue was caused by incorrectly named GitHub repository secrets. After configuring `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` correctly, the workflow was rerun and successfully published the Docker image.
 
@@ -105,21 +113,27 @@ The issue was caused by incorrectly named GitHub repository secrets. After confi
 To verify the automation, the Flask homepage response was modified.
 
 **Original:**
+
 ```python
 return 'Welcome to my homepage'
 ```
+
 **Updated:**
+
 ```python
 return 'Welcome to my homepage - Updated using CI/CD!'
 ```
-The change was committed and pushed to the `main` branch.
+
+The change was committed and pushed to the `main` branch, automatically triggering CI and subsequently CD after successful validation.
 
 ### Automated Workflow Execution
 
-![Automated CI/CD Workflow](screenshots/cd/automated-cicd-workflow.png)
+![Automated CI/CD Workflow](screenshots/automated-cicd-workflow.png)
 
-This demonstrates that application changes can automatically trigger code validation, Docker image builds and image publishing without manually executing the pipeline.
+The successful workflow demonstrates that application changes automatically trigger code validation, Docker image building and publishing without manual intervention.
 
 ## Outcome
 
-Successfully implemented an automated CI/CD pipeline using GitHub Actions.
+Successfully implemented an automated CI/CD pipeline using GitHub Actions, incorporating Python linting, Docker image build verification, secure registry authentication and automated image publishing.
+
+The pipeline publishes images to Docker Hub but does not deploy containers to a running environment.
